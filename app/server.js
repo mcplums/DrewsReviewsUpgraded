@@ -18,6 +18,7 @@ web3.eth.net.getId().then(function(networkId) {
         deployedNetwork.address,
     );
     setupReviewEventListener(instance);
+    setupUserReviewEventListener(instance);
 })
 
 var app = express();
@@ -48,6 +49,42 @@ app.get('/reviews', function(req, res) {
   });
 });
 
+app.get('/userreviews', function(req, res) {
+
+ var query = {};
+ if (req.query.filmId !== undefined) {
+  query['filmId'] = {$eq: req.query.filmId};
+ }
+
+  collections.userReviewModel.find(query, null, {sort: 'userReviewId'}, function(err, items) {
+    /*console.log(items.length);*/
+    res.send(items);
+  });
+});
+
+app.get('/header', function(req, res) {
+	collections.userReviewModel.count( {} , function(err, count) {		
+    //console.log("count:", count);
+    if (count > 0 ) {
+    		 console.log('A page is being loaded');
+      collections.userReviewModel.findOne({ 'userReviewId': count }, function (err, dbProduct) {
+        //Below is the hack where I look into the other database for the film name and add it to reviewText variable and pass it to the front end. 
+
+        //console.log("first answer:",dbProduct);
+       collections.ReviewModel.findOne({ 'blockchainId': dbProduct.filmId}, function(err, items) {
+        //console.log("second answer:",items);
+        dbProduct.reviewText = items.name;
+
+        res.send(dbProduct);
+
+      });
+
+     });
+    }
+    });
+});
+
+
 function setupReviewEventListener(i) {
     i.events.newReview({
         fromBlock: 0
@@ -56,6 +93,16 @@ function setupReviewEventListener(i) {
         saveReview(event.returnValues);
     })
 }
+
+function setupUserReviewEventListener(i) {
+    i.events.newUserReview({
+        fromBlock: 0
+    }, (error, event) => {
+        console.log(event.returnValues);
+        saveUserReview(event.returnValues);
+    })
+}
+
 
 function saveReview(review) {
     collections.ReviewModel.findOne({
@@ -85,5 +132,40 @@ function saveReview(review) {
                 });
             }
         });
+    })
+}
+
+function saveUserReview(review) {
+
+  console.log("saveUserReview is being called");
+
+    collections.ReviewModel.update(
+    	{ 'blockchainId': review._filmId }, 
+    	{ $inc: { "userReviewCount": 1 } }, 
+    	function(err, res) {
+    		if (err) throw err;
+    	});
+
+    //Add actual userreview to thing
+    collections.userReviewModel.findOne({ 'userReviewId': review._userReviewId }, function (err, dbProduct) {
+
+    	if (dbProduct != null) {
+    		//console.log("Already in the database");
+    		return;
+    	}
+
+    	var p = new collections.userReviewModel({filmId: review._filmId, userReviewId: review._userReviewId, userName: review._userName, reviewText: review._review, score: review._score, deleted: 0
+    	});
+
+    	p.save(function(error) {
+    		if (error) {
+    			console.log(error);
+    		} else {
+    			collections.userReviewModel.count({}, function(err, count) {
+    				if (err) throw err;
+    				//console.log("User Review count is " + count);
+    			});
+    		}
+    	});
     })
 }

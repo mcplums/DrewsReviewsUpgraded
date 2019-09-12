@@ -68,22 +68,22 @@ function addReview(string memory _name, string memory _review, uint _reviewdate,
 //     emit editedUserReview(_originalReview.filmId, _userReviewId, _originalReview.userName, _originalReview.review, _originalReview.score, 1);
 // }
 
-// function addUserReview(uint _filmId, string _username, string _review, uint _score) public {
-//     userReviewIndex += 1;
+function addUserReview(uint _filmId, string memory _username, string memory _review, uint _score) public {
+    userReviewIndex += 1;
     
-//     userReview memory _userReview = userReview (_filmId, _username, _review, _score, 0);
-//     userReviewList[userReviewIndex] = _userReview;
-//     emit newUserReview(_filmId, userReviewIndex, _username, _review, _score);
-// }
+    userReview memory _userReview = userReview (_filmId, _username, _review, _score, 0);
+    userReviewList[userReviewIndex] = _userReview;
+    emit newUserReview(_filmId, userReviewIndex, _username, _review, _score);
+}
 
 function getReview(uint _filmId) view public returns (string memory, string memory, uint, uint, string memory, uint) {
 	Review memory review = reviewList[_filmId];
 	return (review.name, review.review, review.reviewDate, review.score, review.imageSource, review.deleted);
 }
 
-// function getUserReview(uint _userReviewId) view public returns (uint, string, string, uint, uint) {
-// 	userReview memory _userReview = userReviewList[_userReviewId];
-// 	return (_userReview.filmId, _userReview.userName, _userReview.review, _userReview.score, _userReview.deleted);
-// }
+function getUserReview(uint _userReviewId) view public returns (uint, string memory, string memory, uint, uint) {
+	userReview memory _userReview = userReviewList[_userReviewId];
+	return (_userReview.filmId, _userReview.userName, _userReview.review, _userReview.score, _userReview.deleted);
+}
 
 }
