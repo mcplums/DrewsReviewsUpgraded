@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import "./app.css";
-import ecommerceStoreArtifact from "../../build/contracts/EcommerceStore.json";
+import DrewsReviewsArtifact from "../../build/contracts/DrewsReviews.json";
 
 const App = {
  web3: null,
@@ -13,9 +13,9 @@ const App = {
   try {
    // get contract instance
    const networkId = await web3.eth.net.getId();
-   const deployedNetwork = ecommerceStoreArtifact.networks[networkId];
+   const deployedNetwork = DrewsReviewsArtifact.networks[networkId];
    this.instance = new web3.eth.Contract(
-    ecommerceStoreArtifact.abi,
+    DrewsReviewsArtifact.abi,
     deployedNetwork.address,
    );
 
@@ -23,23 +23,33 @@ const App = {
    const accounts = await web3.eth.getAccounts();
    this.account = accounts[0];
 
-   this.renderStore();
+   this.renderHome();
 
-   $("#add-item-to-store").submit(function(event) {
-  const req = $("#add-item-to-store").serialize();
+   $("#add-review").submit(function(event) {
+  const req = $("#add-review").serialize();
   let params = JSON.parse('{"' + req.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g,'":"') + '"}');
   let decodedParams = {}
   Object.keys(params).forEach(function(v) {
    decodedParams[v] = decodeURIComponent(decodeURI(params[v]));
   });
   console.log(decodedParams);
-  App.saveProduct(decodedParams);
+  App.addReview(decodedParams);
   event.preventDefault();
  });
 
   } catch (error) {
    console.error("Could not connect to contract or chain.");
   }
+ },
+
+ addReview: async function(review) {
+  var ts = Math.round((new Date()).getTime() / 1000);
+  console.log("gets this far")
+  const { addReview } = this.instance.methods;
+  console.log("stfu")
+  
+  addReview(review["film-name"], review["review-text"], ts, review["film-score"], review["poster-source"]).send({from: this.account, gas: 4700000});
+  console.log("stfu2")
  },
 
  saveProduct: async function(product) {
@@ -51,63 +61,61 @@ const App = {
  },
 
 // legacy
- // renderStore: async function() {
- //  const { productIndex } = this.instance.methods;
- //  var count = await productIndex().call();
- //  for(var i=1; i<= count; i++) {
- //   this.renderProduct(i);
- //  }
- // },
-
-  renderStore: async function() {
- var renderProduct = this.renderProduct;
- $.ajax({
-  url: "http://localhost:3000/products",
-  type: 'get',
-  contentType: 'application/json; charset=utf-8',
-  data: {}
- }).done(function(data) {
-  console.log(data);
-  while(data.length > 0) {
-   let chunks = data.splice(0, 4);
-   chunks.forEach(function(value) {
-    renderProduct(value);
-   });
+ renderHome: async function() {
+  const { reviewIndex } = this.instance.methods;
+  var count = await reviewIndex().call();
+  for(var i=1; i<= count; i++) {
+   this.renderReviews(i);
   }
- });
  },
+
+// new
+ //  renderStore: async function() {
+ // var renderProduct = this.renderProduct;
+ // $.ajax({
+ //  url: "http://localhost:3000/products",
+ //  type: 'get',
+ //  contentType: 'application/json; charset=utf-8',
+ //  data: {}
+ // }).done(function(data) {
+ //  console.log(data);
+ //  while(data.length > 0) {
+ //   let chunks = data.splice(0, 4);
+ //   chunks.forEach(function(value) {
+ //    renderProduct(value);
+ //   });
+ //  }
+ // });
+ // },
 
 // legacy
- // renderProduct: async function(index) {
- //  const { getProduct } = this.instance.methods;
- //  var f = await getProduct(index).call()
+ renderReviews: async function(index) {
+  const { getReview } = this.instance.methods;
+  var q = await getReview(index).call()
+  console.log(q)
+let node = $("<div id='review'>");
+node.append("<div id='poster'><img style='width:150px' src=posters/" + q[4] + "></div>");
+node.append("<div id='rightside'><span id='title'>" + q[0] + "<img src='images/" + q[3] + ".png'/></span><span id='reviewtext'>" + q[1] + "</span></div>");
+$("#reviews").append(node);
+ },
+
+ //new
+ //  renderProduct: async function(product) {
+ //  console.log(product);
  //  let node = $("<div/>");
  //  node.addClass("col-sm-3 text-center col-margin-bottom-1 product");
- //  node.append("<div class='title'>" + f[1] + "</div>");
- //  node.append("<div> Price: " + displayPrice(f[6]) + "</div>");
- //  if (f[8] === '0x0000000000000000000000000000000000000000') {
+ //  node.append("<img src='stfu' />");
+ //  node.append("<div class='title'>" + product.name + "");
+ //  node.append("<div> Price: " + displayPrice(product.price.toString()) + "");
+ //  node.append("<a href='product.html?id=" + product.blockchainId + "'>Details");
  //   $("#product-list").append(node);
- //  } else {
- //   $("#product-purchased").append(node);
- //  }
  // },
-
-  renderProduct: async function(product) {
-  console.log(product);
-  let node = $("<div/>");
-  node.addClass("col-sm-3 text-center col-margin-bottom-1 product");
-  node.append("<img src='stfu' />");
-  node.append("<div class='title'>" + product.name + "");
-  node.append("<div> Price: " + displayPrice(product.price.toString()) + "");
-  node.append("<a href='product.html?id=" + product.blockchainId + "'>Details");
-   $("#product-list").append(node);
- },
 
 };
 
-function displayPrice(amt) {
- return "Ξ" + App.web3.utils.fromWei(amt, 'ether');
-}
+// function displayPrice(amt) {
+//  return "Ξ" + App.web3.utils.fromWei(amt, 'ether');
+// }
 
 window.App = App;
 

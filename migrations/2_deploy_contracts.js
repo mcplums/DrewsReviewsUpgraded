@@ -1,5 +1,5 @@
-const EcommerceStore = artifacts.require("EcommerceStore");
+const DrewsReviews = artifacts.require("DrewsReviews");
 
 module.exports = function(deployer) {
-  deployer.deploy(EcommerceStore);
+  deployer.deploy(DrewsReviews);
 };
