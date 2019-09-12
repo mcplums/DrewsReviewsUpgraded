@@ -5,7 +5,7 @@ var Web3 = require('web3')
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 var collections = require('./review');
-mongoose.connect("mongodb://localhost:27017/reviews_new");
+mongoose.connect("mongodb://localhost:27017/drews_reviews");
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
@@ -36,13 +36,16 @@ app.get('/', function(req, res) {
     res.send("Hello, Dickhead!");
 });
 
-app.get('/products', function(req, res) {
-    ProductModel.find({}, null, {
-        sort: 'startTime'
-    }, function(err, items) {
-        console.log(items.length);
-        res.send(items);
-    });
+app.get('/reviews', function(req, res) {
+
+ var query = {};
+ if (req.query.blockchainId !== undefined) {
+  query['blockchainId'] = {$eq: req.query.blockchainId};
+ }
+
+ collections.ReviewModel.find({}, null, {sort: {blockchainId: -1}}, function(err, items) {
+    res.send(items);
+  });
 });
 
 function setupReviewEventListener(i) {

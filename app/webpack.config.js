@@ -14,7 +14,9 @@ module.exports = {
       { from: "./src/index.html", to: "index.html" },
       { from: "./src/addreview.html", to: "addreview.html" },
       { from: "./src/header.html", to: "header.html" },
-      { from: "./src/userreviews.html", to: "userreviews.html" }
+      { from: "./src/userreviews.html", to: "userreviews.html" },
+      { from: './src/posters/', to: "posters/" },
+      { from: './src/images/', to: "images/" }
       ]),
   ],
   module: {

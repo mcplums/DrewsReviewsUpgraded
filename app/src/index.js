@@ -61,55 +61,72 @@ const App = {
  },
 
 // legacy
- renderHome: async function() {
-  const { reviewIndex } = this.instance.methods;
-  var count = await reviewIndex().call();
-  for(var i=1; i<= count; i++) {
-   this.renderReview(i);
-  }
- },
+ // renderHome: async function() {
+ //  const { reviewIndex } = this.instance.methods;
+ //  var count = await reviewIndex().call();
+ //  for(var i=1; i<= count; i++) {
+ //   this.renderReview(i);
+ //  }
+ // },
 
 // new
- //  renderStore: async function() {
- // var renderProduct = this.renderProduct;
- // $.ajax({
- //  url: "http://localhost:3000/products",
- //  type: 'get',
- //  contentType: 'application/json; charset=utf-8',
- //  data: {}
- // }).done(function(data) {
- //  console.log(data);
- //  while(data.length > 0) {
- //   let chunks = data.splice(0, 4);
- //   chunks.forEach(function(value) {
- //    renderProduct(value);
- //   });
- //  }
- // });
- // },
-
-// legacy
- renderReview: async function(index) {
-  const { getReview } = this.instance.methods;
-  var q = await getReview(index).call()
-  console.log(q)
-let node = $("<div id='review'>");
-node.append("<div id='poster'><img style='width:150px' src=posters/" + q[4] + "></div>");
-node.append("<div id='rightside'><span id='title'>" + q[0] + "<img src='images/" + q[3] + ".png'/></span><span id='reviewtext'>" + q[1] + "</span></div>");
-$("#reviews").append(node);
+  renderHome: async function() {
+ var renderReview = this.renderReview;
+ $.ajax({
+  url: "http://localhost:3000/reviews",
+  type: 'get',
+  contentType: 'application/json; charset=utf-8',
+  data: {}
+ }).done(function(data) {
+  console.log(data);
+  while(data.length > 0) {
+   let chunks = data.splice(0, 4);
+   chunks.forEach(function(value) {
+    renderReview(value);
+   });
+  }
+ });
  },
 
+// legacy
+//  renderReview: async function(index) {
+//   const { getReview } = this.instance.methods;
+//   var q = await getReview(index).call()
+//   console.log(q)
+// let node = $("<div id='review'>");
+// node.append("<div id='poster'><img style='width:150px' src=posters/" + q[4] + "></div>");
+// node.append("<div id='rightside'><span id='title'>" + q[0] + "<img src='images/" + q[3] + ".png'/></span><span id='reviewtext'>" + q[1] + "</span></div>");
+// $("#reviews").append(node);
+//  },
+
  //new
- //  renderProduct: async function(product) {
- //  console.log(product);
- //  let node = $("<div/>");
- //  node.addClass("col-sm-3 text-center col-margin-bottom-1 product");
- //  node.append("<img src='stfu' />");
- //  node.append("<div class='title'>" + product.name + "");
- //  node.append("<div> Price: " + displayPrice(product.price.toString()) + "");
- //  node.append("<a href='product.html?id=" + product.blockchainId + "'>Details");
- //   $("#product-list").append(node);
- // },
+  renderReview: async function(review) {
+  console.log(review);
+if (review.deleted == 0)
+        {
+        if ( review.userReviewCount > 1 )
+        {
+          let node = $("<div id='review'>");
+          node.append("<div id='poster'><a href='userreviews.html?id=" + review.blockchainId + "''><img style='width:150px' src='posters/" + review.posterSource + "'></a></div>");
+          node.append("<div id='rightside'><span id='title'>" + review.name + "<img src='images/" + review.score + ".png'/><span id='user-review-link'><sup><a href='userreviews.html?id=" + review.blockchainId +"'' style='color:#3E4655'>View " + review.userReviewCount + " User Reviews</a></sup></span></span><span id='reviewtext'>" + review.reviewText + "</span></div>");
+          $("#reviews").append(node);
+        }
+        else if ( review.userReviewCount == 1 )
+        {
+          let node = $("<div id='review'>");
+          node.append("<div id='poster'><a href='userreviews.html?id=" + review.blockchainId + "''><img style='width:150px' src='posters/" + review.posterSource + "'></a></div>");
+          node.append("<div id='rightside'><span id='title'>" + review.name + "<img src='images/" + review.score + ".png'/><span id='user-review-link'><sup><a href='userreviews.html?id=" + review.blockchainId +"'' style='color:#3E4655'>View 1 User Review</a></sup></span></span><span id='reviewtext'>" + review.reviewText + "</span></div>");
+          $("#reviews").append(node);
+        }
+        else
+        {
+          let node = $("<div id='review'>");
+          node.append("<div id='poster'><a href='userreviews.html?id=" + review.blockchainId + "''><img id='posterimage' style='width:150px' src='posters/" + review.posterSource + "'></a></div>");
+          node.append("<div id='rightside'><span id='title'>" + review.name + "<img src='images/" + review.score + ".png'/><span id='user-review-link'><sup><a href='userreviews.html?id=" + review.blockchainId +"'' style='color:#3E4655'>Add Your Own Review</a></sup></span></span><span id='reviewtext'>" + review.reviewText + "</span></div>");
+          $("#reviews").append(node);
+        }
+      }
+ },
 
 };
 
