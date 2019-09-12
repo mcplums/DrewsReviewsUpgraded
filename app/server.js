@@ -110,6 +110,7 @@ function saveReview(review) {
     }, function(err, dbProduct) {
 
         if (dbProduct != null) {
+        	console.log("Review with ID " + review._filmId + "Already in the database");
             return;
         }
 
@@ -150,7 +151,7 @@ function saveUserReview(review) {
     collections.userReviewModel.findOne({ 'userReviewId': review._userReviewId }, function (err, dbProduct) {
 
     	if (dbProduct != null) {
-    		//console.log("Already in the database");
+    		console.log("User review with ID " + review._userReviewId + "Already in the database");
     		return;
     	}
 
@@ -161,9 +162,9 @@ function saveUserReview(review) {
     		if (error) {
     			console.log(error);
     		} else {
-    			collections.userReviewModel.count({}, function(err, count) {
+    			collections.userReviewModel.countDocuments({}, function(err, count) {
     				if (err) throw err;
-    				//console.log("User Review count is " + count);
+    				console.log("User Review count is " + count);
     			});
     		}
     	});

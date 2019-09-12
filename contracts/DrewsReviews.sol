@@ -28,8 +28,8 @@ contract DrewsReviews {
 	}
 	
 constructor () public {
-    reviewIndex = 0;
-    userReviewIndex = 0;
+    reviewIndex = 27;
+    userReviewIndex = 23;
 }
 
 event newReview(uint _filmId, string _name, string _review, string _imageSource, uint _score);
