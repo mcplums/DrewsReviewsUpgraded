@@ -5293,10 +5293,65 @@
       "links": {},
       "address": "0x58EA672DAfEDA253C8cd68aD5d452983D521268A",
       "transactionHash": "0x04144e98fc34cac20aa18e9d7be52e3a8e5861e7a6b6e5fa0c4459585cc1b2f8"
+    },
+    "1568265170179": {
+      "events": {
+        "0xd952ab5034808c75d7ae7c37cf56ef07be795c8c8d212578af61c43f81b5b2b8": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "_productId",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_name",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "_category",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "_imageLink",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "_descLink",
+              "type": "string"
+            },
+            {
+              "indexed": false,
+              "name": "_startTime",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_price",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "name": "_productCondition",
+              "type": "uint256"
+            }
+          ],
+          "name": "NewProduct",
+          "type": "event",
+          "signature": "0xd952ab5034808c75d7ae7c37cf56ef07be795c8c8d212578af61c43f81b5b2b8"
+        }
+      },
+      "links": {},
+      "address": "0x7fE97c56991e10DFac8820385ac4188721112A1B",
+      "transactionHash": "0x58e3d883876a1154e9d78a31e29dccefc17b7950467cec623dec74af1e73bb32"
     }
   },
   "schemaVersion": "3.0.15",
-  "updatedAt": "2019-09-11T11:34:32.493Z",
+  "updatedAt": "2019-09-12T05:14:14.481Z",
   "devdoc": {
     "methods": {}
   },

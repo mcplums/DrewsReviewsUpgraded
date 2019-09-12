@@ -12,6 +12,9 @@ app.get('/', function(req, res) {
 */
 
 var express = require('express');
+
+
+
 var ecommerceStoreArtifact = require("../build/contracts/EcommerceStore.json");
 var Web3 = require('web3')
 
@@ -35,12 +38,25 @@ web3.eth.net.getId().then(function(networkId) {
 
 var app = express();
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 app.listen(3000, function() {
  console.log("Ebay on Ethereum server listening on port 3000");
 });
 
 app.get('/', function(req, res) {
  res.send("Hello, Ethereum!");
+});
+
+app.get('/products', function(req, res) {
+ ProductModel.find({}, null, {sort: 'startTime'}, function(err, items) {
+ 	console.log(items.length);
+ 	res.send(items);
+ });
 });
 
 function setupProductEventListner(i) {

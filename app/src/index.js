@@ -50,26 +50,57 @@ const App = {
      this.web3.utils.toWei(product["product-price"], 'ether'), product["product-condition"]).send({from: this.account, gas: 4700000});
  },
 
- renderStore: async function() {
-  const { productIndex } = this.instance.methods;
-  var count = await productIndex().call();
-  for(var i=1; i<= count; i++) {
-   this.renderProduct(i);
+// legacy
+ // renderStore: async function() {
+ //  const { productIndex } = this.instance.methods;
+ //  var count = await productIndex().call();
+ //  for(var i=1; i<= count; i++) {
+ //   this.renderProduct(i);
+ //  }
+ // },
+
+  renderStore: async function() {
+ var renderProduct = this.renderProduct;
+ $.ajax({
+  url: "http://localhost:3000/products",
+  type: 'get',
+  contentType: 'application/json; charset=utf-8',
+  data: {}
+ }).done(function(data) {
+  console.log(data);
+  while(data.length > 0) {
+   let chunks = data.splice(0, 4);
+   chunks.forEach(function(value) {
+    renderProduct(value);
+   });
   }
+ });
  },
 
- renderProduct: async function(index) {
-  const { getProduct } = this.instance.methods;
-  var f = await getProduct(index).call()
+// legacy
+ // renderProduct: async function(index) {
+ //  const { getProduct } = this.instance.methods;
+ //  var f = await getProduct(index).call()
+ //  let node = $("<div/>");
+ //  node.addClass("col-sm-3 text-center col-margin-bottom-1 product");
+ //  node.append("<div class='title'>" + f[1] + "</div>");
+ //  node.append("<div> Price: " + displayPrice(f[6]) + "</div>");
+ //  if (f[8] === '0x0000000000000000000000000000000000000000') {
+ //   $("#product-list").append(node);
+ //  } else {
+ //   $("#product-purchased").append(node);
+ //  }
+ // },
+
+  renderProduct: async function(product) {
+  console.log(product);
   let node = $("<div/>");
   node.addClass("col-sm-3 text-center col-margin-bottom-1 product");
-  node.append("<div class='title'>" + f[1] + "</div>");
-  node.append("<div> Price: " + displayPrice(f[6]) + "</div>");
-  if (f[8] === '0x0000000000000000000000000000000000000000') {
+  node.append("<img src='stfu' />");
+  node.append("<div class='title'>" + product.name + "");
+  node.append("<div> Price: " + displayPrice(product.price.toString()) + "");
+  node.append("<a href='product.html?id=" + product.blockchainId + "'>Details");
    $("#product-list").append(node);
-  } else {
-   $("#product-purchased").append(node);
-  }
  },
 
 };
