@@ -1,25 +1,39 @@
+/*var express = require('express');
+var app = express();
 
+app.listen(3000, function() {
+ console.log("Ebay on Ethereum server listening on port 3000");
+});
+
+
+app.get('/', function(req, res) {
+ res.send("Hello, Ethereum!");
+});
+*/
 
 var express = require('express');
-var DrewsReviewsArtifact = require("../build/contracts/DrewsReviews.json");
+
+
+
+var ecommerceStoreArtifact = require("../build/contracts/EcommerceStore.json");
 var Web3 = require('web3')
 
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-var ReviewModel = require('./review');
-mongoose.connect("mongodb://localhost:27017/reviews");
+var ProductModel = require('./product');
+mongoose.connect("mongodb://localhost:27017/ebay_dapp_upgrade");
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 web3 = new Web3(new Web3.providers.WebsocketProvider('http://127.0.0.1:8545'))
 
 web3.eth.net.getId().then(function(networkId) {
- const deployedNetwork = DrewsReviewsArtifact.networks[networkId];
+ const deployedNetwork = ecommerceStoreArtifact.networks[networkId];
  instance = new web3.eth.Contract(
-  DrewsReviewsArtifact.abi,
+  ecommerceStoreArtifact.abi,
   deployedNetwork.address,
  );
- setupReviewEventListener(instance);
+ setupProductEventListner(instance);
 })
 
 var app = express();
@@ -35,7 +49,7 @@ app.listen(3000, function() {
 });
 
 app.get('/', function(req, res) {
- res.send("Hello, Dickhead!");
+ res.send("Hello, Ethereum!");
 });
 
 app.get('/products', function(req, res) {
@@ -45,32 +59,29 @@ app.get('/products', function(req, res) {
  });
 });
 
-function setupReviewEventListener(i) {
- i.events.newReview({fromBlock: 0}, (error, event) => { 
+function setupProductEventListner(i) {
+ i.events.NewProduct({fromBlock: 0}, (error, event) => { 
   console.log(event.returnValues);
-  saveReview(event.returnValues);
+  saveProduct(event.returnValues);
  })
 }
 
-function saveReview(review) {
-
-console.log("Starting saveReview");
-
-ReviewModel.findOne({ 'blockchainId': review._filmId.toNumber() }, function (err, dbProduct) {
-
+function saveProduct(product) {
+ ProductModel.findOne({ 'blockchainId': product._productId }, function (err, dbProduct) {
  if (dbProduct != null) {
   return;
  }
 
- var p = new ReviewModel({name: review._name, blockchainId: review._filmId,
-      reviewText: review._review, score: review._score, posterSource: review._imageSource, userReviewCount: 0, deleted: 0
-    });
+ var p = new ProductModel({name: product._name, blockchainId: product._productId,
+  category: product._category, ipfsImageHash: product._imageLink, ipfsDescHash: product._descLink,
+  startTime: product._startTime, price: product._price, condition: product._productCondition
+  });
 
  p.save(function(error) {
   if (error) {
   console.log(error);
   } else {
-  ReviewModel.countDocuments({}, function(err, count) {
+  ProductModel.countDocuments({}, function(err, count) {
    console.log("count is " + count);
   });
   }

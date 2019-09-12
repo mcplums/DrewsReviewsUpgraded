@@ -24,8 +24,6 @@ const App = {
    const accounts = await web3.eth.getAccounts();
    this.account = accounts[0];
 
-   
-
        if ($("#user-reviews").length > 0) {
             //product page always has an id, this is how it gets access to it
             let filmId = new URLSearchParams(window.location.search).get('id');
