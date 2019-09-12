@@ -1,9 +1,231 @@
+#header-left-side {
+  width:21%;
+  display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+  color: #FFFFFF;
+      font-size: 11pt;
+      vertical-align: top;
+      line-height: 1;
+      margin:5px;
+}
+
+#header-left-side  a {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+#header-center a {
+  width:58%;
+  display: inline-block;
+  text-align: center;
+  font-size: 40pt;
+    color: #FFFFFF;
+        font-family: Arial, Helvetica, sans-serif;
+        line-height: 1;
+        color:white;
+        text-decoration: none;
+
+}
+
+#footer {
+    text-align: center;
+  }
+
+  #footerspan a {
+    display: inline-block;
+    position: relative;    
+    font-size: 13pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #3E4655;
+  }
+
+
+
+#header {
+    margin: 0;
+    padding: 0;
+
+    height: 139px;
+    background-color: #202645;
+  }
+#header-wrap, #wrap{
+  margin: 0 auto;
+  padding: 0;
+  width: 790px;
+}
+
+
+
+/*//////////////*/
+
+#user-review-link a {
+  font-size: 9pt;
+  color: grey !important;
+  text-decoration: none;
+  font-variant: none;
+}
+
+#add-user-review {
+  position:relative;
+  width:525px;
+  margin:0 auto;
+
+}
+
+#user-reviews {
+  position:relative;
+  width:525px;
+  margin:0 auto;
+
+}
+
+
+#reviews {
+  position:relative;
+  width:525px;
+  margin: 0 auto;
+
+  
+}
+
+#genericmid {
+  position:relative;
+  width:525px;
+  margin:0 auto;
+  
+}
+
+#myextra {
+  width:200px;
+}
+
+#userreviewform {
+  position:relative;
+  width:740px;
+  margin:0 auto;
+  
+}
+
+#review {
+vertical-align:top;
+display: block;
+  height:240px;
+  
+}
+
+#posterimage {
+
+}
+
+#rightside {
+    display: inline-block;
+    vertical-align:top;
+    width:367px;
+    padding-left:8px;
+}
+
+#poster {
+display: inline;
+vertical-align:top;
+width: 150px;
+}
+
+#title {
+  vertical-align:top;
+  display: block;
+
+
+  font-size: 15pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #3E4655;
+    font-variant: small-caps;
+}
+
+#reviewtext {
+
+  vertical-align:top;
+  display: inline;
+    font-size: 13pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #3E4655;
+}
+
+#reviewtext a {
+
+
+    color: #3E4655;
+}
+
+
+#score {
+position:absolute;
+    top:0px;
+    left:260px;
+}
+
+
+
+/*//////////////*/
+a {
+  color:white
+}
+
+    .auto-style-title {
+    text-align: center;
+    font-family: "Gill Sans";
+    font-size: 40pt;
+    color: #FFFFFF;
+  }
+  
+
+      .auto-style-content {
+    font-size: 13pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #3E4655;
+    text-align: center;
+  }
+  
+    .auto-style-filmtitle {
+  font-size: 13pt;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #3E4655;
+  font-variant: small-caps;
+}
+
+
+      .auto-style-sortby {
+    font-size: 11pt;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #FFFFFF;
+    margin-top: 0;
+  }
+    .auto-style1 {
+    font-size: 11pt;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    color: #FFFFFF;
+    text-align: right;
+  }
+
+
+      .auto-style-o {
+    color: #202645;
+  }
+  
+  .alignleft {
+  float: left;
+}
+.alignright {
+  float: right;
+}
+
+
 .col-margin-bottom-1 {
   margin-bottom: 1em;
 }
 
 a {
   cursor: pointer;
+  color: white;
 }
 
 .navbar.main {
@@ -121,6 +343,11 @@ a {
   color: #5f6d7f;
 }
 
+body {
+      display: block;
+    margin: 8px;
+}
+
 #product-details-page h2.product-name {
   color: #01bf86;
   margin-top: 0;
@@ -146,3 +373,29 @@ a {
 #product-details-page #product-desc {
   padding: 2em;
 }
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  border-radius: 6px;
+ 
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+

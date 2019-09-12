@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="en-gb" http-equiv="Content-Language">
+    <title>Drew's Reviewss</title>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <script src="./index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(function(){
+    $("#headerBanner").load("header.html");
+    });
+
+    $(function(){
+  var list = ['At no point did I see Gandalf', 'Like most films, this could have been improved by a hot ginger central character','This film was built like a Steakhouse, but handles like a Bistro', 'I appreciated the fact that Tom Cruise did not appear', 'Drew your site is bad and you should feel bad', 'I did not enjoy the film, and I enjoyed reading your review of it even less', 'Offers nothing for those with yellow fever', 'Why not Zoidberg?', 'STFU', 'I\'m pretty sure this site uses cookies but I don\'t recall agreeing to that. Feds inc'],
+      r = Math.floor(Math.random() * list.length);
+  $('#review-text').prop('placeholder',list[r]);
+});
+
+    </script>
+  </head>
+  <body>
+    <div id="headerBanner"></div>
+    <br><br>
+    <div class="row" id="user-reviews">
+      <div id="reviews"></div><br><strong>User Reviews:</strong>
+      <div id="userreviews">
+        
+      </div>
+    </div>
+
+
+    <div id="genericmid"><br><strong>Add your own review to the blockchain [requires MetaMask]</strong><br><br></div>
+
+
+
+
+<div id="userreviewform">
+      <form class="form-horizontal col-sm-5" id="add-user-review">
+        <div class="form-group">
+          <label for="film-name" class="col-sm-2 control-label myextra">Your Name</label>
+         <div class="col-sm-10">
+            <input type="text" name="user-name" class="form-control" id="user-name" placeholder="Captain Dumbass" required="required"></input>
+          </div>
+        </div>
+       <div class="form-group">
+          <label for="film-score" class="col-sm-2 control-label">Score</label>
+          <div class="col-sm-10">
+            <select class="form-control" name="film-score" id="film-score">
+              <option value="5">0.5</option>
+              <option value="10">1</option>
+              <option value="15">1.5</option>
+              <option value="20">2</option>
+              <option value="25">2.5</option>
+              <option value="35">3.5</option>
+              <option value="40">4</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="review-text" class="col-sm-2 control-label">Review text</label>
+          <div class="col-sm-10">
+            <textarea maxlength="400" class="form-control" name="review-text" id="review-text"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Add Review</button>
+          </div>
+        </div>
+      </form>
+<div>
+  </body>
+</html>

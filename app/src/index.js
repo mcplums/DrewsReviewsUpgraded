@@ -2,6 +2,7 @@ import Web3 from "web3";
 import "./app.css";
 import DrewsReviewsArtifact from "../../build/contracts/DrewsReviews.json";
 
+
 const App = {
  web3: null,
  account: null,
@@ -23,7 +24,16 @@ const App = {
    const accounts = await web3.eth.getAccounts();
    this.account = accounts[0];
 
-   this.renderHome();
+   
+
+       if ($("#user-reviews").length > 0) {
+            //product page always has an id, this is how it gets access to it
+            let filmId = new URLSearchParams(window.location.search).get('id');
+            console.log("STFU");
+            this.renderReview(filmId)
+          } else {
+            this.renderHome();
+          }
 
    $("#add-review").submit(function(event) {
   const req = $("#add-review").serialize();
@@ -52,20 +62,12 @@ const App = {
   console.log("stfu2")
  },
 
- saveProduct: async function(product) {
-  const { addProductToStore } = this.instance.methods;
-  
-  addProductToStore(product["product-name"], product["product-category"], "imageLink",
-      "descLink", Date.parse(product["product-start-time"]) / 1000,
-     this.web3.utils.toWei(product["product-price"], 'ether'), product["product-condition"]).send({from: this.account, gas: 4700000});
- },
-
 // legacy
  renderHome: async function() {
   const { reviewIndex } = this.instance.methods;
   var count = await reviewIndex().call();
   for(var i=1; i<= count; i++) {
-   this.renderReviews(i);
+   this.renderReview(i);
   }
  },
 
@@ -89,7 +91,7 @@ const App = {
  // },
 
 // legacy
- renderReviews: async function(index) {
+ renderReview: async function(index) {
   const { getReview } = this.instance.methods;
   var q = await getReview(index).call()
   console.log(q)
