@@ -1,0 +1,1 @@
+OK so the drewsreviews.json.new is actually the generated JSON using the upgraded drewsreviews.sol which has a different version of solidity. But I didnt want to pay the $15 to deploy this so I just copied over the drewsreviews.json from the old version.

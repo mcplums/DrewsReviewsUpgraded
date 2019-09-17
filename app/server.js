@@ -9,7 +9,14 @@ mongoose.connect("mongodb://localhost:27017/drews_reviews");
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-web3 = new Web3(new Web3.providers.WebsocketProvider('http://127.0.0.1:8545'))
+// web3 = new Web3(new Web3.providers.WebsocketProvider('http://127.0.0.1:8545'))
+
+// web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/d460ac4e71f24d869c8b75119ebe4213'))
+
+// web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/v3/7bbfee0b81e8407b93e548b33cfc665e'))
+
+web3 = new Web3(new Web3.providers.WebsocketProvider('wss://mainnet.infura.io/ws'))
+
 
 web3.eth.net.getId().then(function(networkId) {
     const deployedNetwork = DrewsReviewsArtifact.networks[networkId];

@@ -28,6 +28,10 @@
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
 
+// require('babel-register')
+var HDWalletProvider = require("truffle-hdwallet-provider");
+var mnemonic = "oyster desk glow eager repeat liquid gift smart music scale honey ice tide barrel history";
+
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -51,6 +55,22 @@ module.exports = {
       port: 8545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
     },
+
+    ropsten: {
+  	provider: function() {
+  		return new HDWalletProvider(mnemonic, "https://ropsten.infura.io/v3/d460ac4e71f24d869c8b75119ebe4213")
+  	},
+  	network_id: 3,
+  	gas: 4700000
+  },
+    main: {
+  	provider: function() {
+  		return new HDWalletProvider(mnemonic, "https://mainnet.infura.io/v3/d460ac4e71f24d869c8b75119ebe4213")
+  	},
+  	network_id: 1,
+  	gas: 5000000,
+  	gasPrice: 21000000000
+  },
 
     // Another network with more advanced options...
     // advanced: {

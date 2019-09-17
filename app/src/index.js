@@ -116,7 +116,7 @@ const App = {
 
             addUserReview(filmId, review["user-name"], review["review-text"], review["film-score"]).send({
                 from: this.account,
-                gas: 4700000
+                gas: 500000
             });
         }
 

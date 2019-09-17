@@ -41,32 +41,13 @@ event newUserReview(uint _filmId, uint _userReviewId, string _userName, string _
 event editedUserReview(uint _filmId, uint _userReviewId, string _userName, string _review, uint _score, uint _deleted);
 
 function addReview(string memory _name, string memory _review, uint _reviewdate, uint _score, string memory _imageSource) public {
+	assert(msg.sender == owner);
 
     reviewIndex += 1;
     Review memory review = Review (_name, _review, _reviewdate, _score, _imageSource, 0 );
     reviewList[reviewIndex] = review;
     emit newReview(reviewIndex, _name, _review, _imageSource, _score);
 }
-
-
-// function editReview(uint _filmId, string _name, string _review, uint _reviewdate, uint _score, string _imageSource, uint _deleted) public {
-// 	assert(msg.sender == owner);
-    
-//     Review memory review = Review (_name, _review, _reviewdate, _score, _imageSource, _deleted );
-
-//     reviewList[_filmId] = review;
-//     emit editedReview(_filmId, _name, _review, _imageSource, _score, _deleted);
-// }
-
-// function deleteUserReview(uint _userReviewId) public {
-// 	assert(msg.sender == owner);
-
-// 	userReview memory _originalReview = userReviewList[_userReviewId];
-    
-//     userReview memory _userReview = userReview ( _originalReview.filmId, _originalReview.userName, _originalReview.review, _originalReview.score, 1);
-//     userReviewList[_userReviewId] = _userReview;
-//     emit editedUserReview(_originalReview.filmId, _userReviewId, _originalReview.userName, _originalReview.review, _originalReview.score, 1);
-// }
 
 function addUserReview(uint _filmId, string memory _username, string memory _review, uint _score) public {
     userReviewIndex += 1;
