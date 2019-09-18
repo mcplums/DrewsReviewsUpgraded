@@ -28,7 +28,19 @@ web3.eth.net.getId().then(function(networkId) {
     setupUserReviewEventListener(instance);
 })
 
+const https = require("https"),
+  fs = require("fs"),
+  helmet = require("helmet");
+
+const options = {
+  key: fs.readFileSync("/etc/letsencrypt/live/drewsreviews.co.uk/privkey.pem"),
+  cert: fs.readFileSync("/etc/letsencrypt/live/drewsreviews.co.uk/fullchain.pem")
+};
+
+
 var app = express();
+
+app.use(helmet());
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -36,9 +48,11 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.listen(3000, function() {
+https.createServer(options, app).listen(3000, function() {
     console.log("Ebay on Ethereum server listening on port 3000");
 });
+
+// https.createServer(options, app).listen(3000);
 
 app.get('/', function(req, res) {
     res.send("Hello, Dickhead!");

@@ -13,6 +13,8 @@ module.exports = {
       { from: "./src/app.css", to: "app.css" }, 
       { from: "./src/index.html", to: "index.html" },
       { from: "./src/addreview.html", to: "addreview.html" },
+      { from: "./src/editreview.html", to: "editreview.html" },
+      { from: "./src/deleteuserreview.html", to: "deleteuserreview.html" },
       { from: "./src/header.html", to: "header.html" },
       { from: "./src/userreviews.html", to: "userreviews.html" },
       { from: './src/posters/', to: "posters/" },

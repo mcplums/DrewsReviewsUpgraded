@@ -1,0 +1,74 @@
+<html>
+  <head>
+    <meta content="en-gb" http-equiv="Content-Language">
+    <title>Drew's Reviews</title>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <script src="./index.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    $(function(){
+    $("#headerBanner").load("header.html");
+    });
+    </script>
+  </head>
+  <body>
+    <div id="headerBanner"></div>
+    <br><br>
+    <form class="form-horizontal col-sm-5" id="edit-review">
+
+      <div class="form-group">
+        <label for="film-name" class="col-sm-2 control-label">Id</label>
+        <div class="col-sm-10">
+          <input type="text" name="id" class="form-control" id="id" required="required"></input>
+        </div>
+      </div>
+            <div class="form-group">
+        <label for="film-name" class="col-sm-2 control-label">Delete</label>
+        <div class="col-sm-10">
+         <select class="form-control" name="deleted" id="deleted">
+            <option value="0">0</option>
+            <option value="1">1</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="film-name" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-10">
+          <input type="text" name="film-name" class="form-control" id="film-name" placeholder="The Return of the Peen" required="required"></input>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="film-score" class="col-sm-2 control-label">Score</label>
+        <div class="col-sm-10">
+          <select class="form-control" name="film-score" id="film-score">
+            <option value="5">0.5</option>
+            <option value="10">1</option>
+            <option value="15">1.5</option>
+            <option value="20">2</option>
+            <option value="25">2.5</option>
+            <option value="35">3.5</option>
+            <option value="40">4</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="poster-source" class="col-sm-2 control-label">Image source</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" name="poster-source" id="poster-source"></input>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="review-text" class="col-sm-2 control-label">Review text</label>
+        <div class="col-sm-10">
+          <textarea class="form-control" name="review-text" id="review-text"></textarea>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-primary">Edit Review</button>
+        </div>
+      </div>
+    </form>
+  </body>
+</html>

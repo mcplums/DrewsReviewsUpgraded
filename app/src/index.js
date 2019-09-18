@@ -9,7 +9,7 @@ var mongoUserReviewsUrl;
 var mongoHeaderUrl;
 var mongoSingleReviewrUrl;
 var ignoreMongo = 0;
-var dev = 1;
+var dev = 0;
 
 if (dev == 1) {
     mongoReviewsUrl = "http://localhost:3000/reviews";
@@ -17,10 +17,10 @@ if (dev == 1) {
     mongoHeaderUrl = "http://localhost:3000/header";
     mongoSingleReviewrUrl = "http://localhost:3000/singlereview";
 } else {
-    mongoReviewsUrl = "http://www.drewsreviews.co.uk:3000/reviews";
-    mongoUserReviewsUrl = "http://www.drewsreviews.co.uk:3000/userreviews";
-    mongoHeaderUrl = "http://www.drewsreviews.co.uk:3000/header";
-    mongoSingleReviewrUrl = "http://www.drewsreviews.co.uk:3000/singlereview";
+    mongoReviewsUrl = "https://www.drewsreviews.co.uk:3000/reviews";
+    mongoUserReviewsUrl = "https://www.drewsreviews.co.uk:3000/userreviews";
+    mongoHeaderUrl = "https://www.drewsreviews.co.uk:3000/header";
+    mongoSingleReviewrUrl = "https://www.drewsreviews.co.uk:3000/singlereview";
 
 }
 
@@ -72,6 +72,30 @@ const App = {
                 event.preventDefault();
             });
 
+            $("#edit-review").submit(function(event) {
+                const req = $("#edit-review").serialize();
+                let params = JSON.parse('{"' + req.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+                let decodedParams = {}
+                Object.keys(params).forEach(function(v) {
+                    decodedParams[v] = decodeURIComponent(decodeURI(params[v]));
+                });
+                console.log(decodedParams);
+                App.editReview(decodedParams);
+                event.preventDefault();
+            });
+
+            $("#delete-user-review").submit(function(event) {
+                const req = $("#delete-user-review").serialize();
+                let params = JSON.parse('{"' + req.replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+                let decodedParams = {}
+                Object.keys(params).forEach(function(v) {
+                    decodedParams[v] = decodeURIComponent(decodeURI(params[v]));
+                });
+                console.log(decodedParams);
+                App.deleteUserReview(decodedParams);
+                event.preventDefault();
+            });
+
             $("#add-user-review").submit(function(event) {
                 //Below gets the info that is submitted by the form, into the variable req
                 const req = $("#add-user-review").serialize();
@@ -100,6 +124,30 @@ const App = {
         addReview(review["film-name"], review["review-text"], ts, review["film-score"], review["poster-source"]).send({
             from: this.account,
             gas: 4700000
+        });
+    },
+
+    editReview: async function(review) {
+        var ts = Math.round((new Date()).getTime() / 1000);
+        const {
+            editReview
+        } = this.instance.methods;
+
+        editReview(review["id"], review["film-name"], review["review-text"], ts, review["film-score"], review["poster-source"], review["deleted"]).send({
+            from: this.account,
+            gas: 4700000
+        });
+    },
+
+    deleteUserReview: async function(review) {
+        var ts = Math.round((new Date()).getTime() / 1000);
+        const {
+            deleteUserReview
+        } = this.instance.methods;
+
+        deleteUserReview(review["id"]).send({
+            from: this.account,
+            gas: 500000
         });
     },
 
