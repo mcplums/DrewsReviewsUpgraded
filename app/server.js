@@ -26,6 +26,8 @@ web3.eth.net.getId().then(function(networkId) {
     );
     setupReviewEventListener(instance);
     setupUserReviewEventListener(instance);
+    setupEditReviewEventListener(instance);
+	setupDeleteUserReviewEventListener(instance);
 })
 
 const https = require("https"),
@@ -110,7 +112,7 @@ function setupReviewEventListener(i) {
     i.events.newReview({
         fromBlock: 0
     }, (error, event) => {
-        console.log(event.returnValues);
+        // console.log(event.returnValues);
         saveReview(event.returnValues);
     })
 }
@@ -119,10 +121,29 @@ function setupUserReviewEventListener(i) {
     i.events.newUserReview({
         fromBlock: 0
     }, (error, event) => {
-        console.log(event.returnValues);
+        // console.log(event.returnValues);
         saveUserReview(event.returnValues);
     })
 }
+
+function setupEditReviewEventListener(i) {
+    i.events.editedReview({
+        fromBlock: 0
+    }, (error, event) => {
+        // console.log(event.returnValues);
+        editReview(event.returnValues);
+    })
+}
+
+function setupDeleteUserReviewEventListener(i) {
+    i.events.editedUserReview({
+        fromBlock: 0
+    }, (error, event) => {
+        console.log(event.returnValues);
+        deleteUserReview(event.returnValues);
+    })
+}
+
 
 
 function saveReview(review) {
@@ -131,9 +152,11 @@ function saveReview(review) {
     }, function(err, dbProduct) {
 
         if (dbProduct != null) {
-        	console.log("Review with ID " + review._filmId + "Already in the database");
+        	// console.log("Review with ID " + review._filmId + " already in the database");
             return;
         }
+
+        console.log("New review: " + review._filmId)
 
         var p = new collections.ReviewModel({
             name: review._name,
@@ -159,22 +182,24 @@ function saveReview(review) {
 
 function saveUserReview(review) {
 
-  console.log("saveUserReview is being called");
-
-    collections.ReviewModel.update(
-    	{ 'blockchainId': review._filmId }, 
-    	{ $inc: { "userReviewCount": 1 } }, 
-    	function(err, res) {
-    		if (err) throw err;
-    	});
+  // console.log("saveUserReview is being called");
 
     //Add actual userreview to thing
     collections.userReviewModel.findOne({ 'userReviewId': review._userReviewId }, function (err, dbProduct) {
 
     	if (dbProduct != null) {
-    		console.log("User review with ID " + review._userReviewId + "Already in the database");
+    		// console.log("User review with ID " + review._userReviewId + " already in the database");
     		return;
     	}
+
+    	console.log("New user review: " + review._userReviewId)
+
+    	    collections.ReviewModel.update(
+    	{ 'blockchainId': review._filmId }, 
+    	{ $inc: { "userReviewCount": 1 } }, 
+    	function(err, res) {
+    		if (err) throw err;
+    	});
 
     	var p = new collections.userReviewModel({filmId: review._filmId, userReviewId: review._userReviewId, userName: review._userName, reviewText: review._review, score: review._score, deleted: 0
     	});
@@ -191,3 +216,72 @@ function saveUserReview(review) {
     	});
     })
 }
+
+function editReview(review) {
+
+  // console.log("Starting editReview");
+  //ProductModel is the scheme, as defined by product.js (which is required for this file, above) it searches the database for the id,it should return null
+  collections.ReviewModel.findOne({ 'blockchainId': review._filmId }, function (err, dbProduct) {
+    //this is a strange way of doing if else, you just put a return in the if, then you don't need to bother with the else
+    if (dbProduct == null) {
+      return;
+    }
+
+    // console.log("New edited review: " + review)
+
+      collections.ReviewModel.update(
+      { 'blockchainId': review._filmId }, 
+      { $set: { 
+        'name':  review._name,
+        'reviewText': review._review, 
+        'score': review._score, 
+        'posterSource': review._imageSource ,
+        'deleted': review._deleted
+        } 
+      }, 
+      function(err, res) {
+        if (err) throw err;
+      });
+
+  })
+}
+
+function deleteUserReview(review) {
+
+  // console.log("Starting deleteUserReview");
+  console.log("Deleted user review: " + review._userReviewId)
+  id = parseInt(review._userReviewId, 10)
+  collections.userReviewModel.findOne({ 'userReviewId': review._userReviewId }, function (err, dbProduct) {
+    //this is a strange way of doing if else, you just put a return in the if, then you don't need to bother with the else
+
+    if (dbProduct == null) {
+    	// console.log("we arent finding shit")
+      return;
+    }
+
+    if (review._deleted == null) {
+      return;
+    }
+
+    console.log("New deleted user review: " + review._userReviewId)
+       
+      collections.ReviewModel.update(
+      { 'blockchainId': review._filmId }, 
+      { $inc: { "userReviewCount": -1 } }, 
+      function(err, res) {
+        if (err) throw err;
+      });
+
+      collections.userReviewModel.update(
+      { 'userReviewId': review._userReviewId }, 
+      { $set: { 
+        'deleted': 1
+        } 
+      }, 
+      function(err, res) {
+        if (err) throw err;
+      });
+
+  })
+}
+

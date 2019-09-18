@@ -147,7 +147,7 @@ const App = {
 
         deleteUserReview(review["id"]).send({
             from: this.account,
-            gas: 500000
+            gas: 90000
         });
     },
 
