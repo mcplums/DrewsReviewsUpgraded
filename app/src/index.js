@@ -48,13 +48,13 @@ const App = {
             const accounts = await web3.eth.getAccounts();
             this.account = accounts[0];
 
-            // this.renderHeader();
+            this.renderHeader();
 
             if ($("#user-reviews").length > 0) {
                 //product page always has an id, this is how it gets access to it
                 let filmId = new URLSearchParams(window.location.search).get('id');
                 console.log("STFU");
-                this.renderReview(filmId)
+                this.renderSingleReview(filmId)
                 this.renderUserReviews(filmId)
             } else {
                 this.renderHome();
@@ -123,7 +123,7 @@ const App = {
 
         addReview(review["film-name"], review["review-text"], ts, review["film-score"], review["poster-source"]).send({
             from: this.account,
-            gas: 4700000
+            gas: 500000
         });
     },
 
@@ -135,7 +135,7 @@ const App = {
 
         editReview(review["id"], review["film-name"], review["review-text"], ts, review["film-score"], review["poster-source"], review["deleted"]).send({
             from: this.account,
-            gas: 4700000
+            gas: 500000
         });
     },
 
@@ -154,6 +154,8 @@ const App = {
     addUserReview: async function(review) {
 
         try {
+            var length = review["review-text"].length + review["user-name"].length;
+            console.log("length is " + length)
             alert("Clicking OK should launch metamask. Refresh the page after your transaction is confirmed to see your review");
 
             var ts = Math.round((new Date()).getTime() / 1000);
@@ -162,16 +164,26 @@ const App = {
                 addUserReview
             } = this.instance.methods;
 
-            addUserReview(filmId, review["user-name"], review["review-text"], review["film-score"]).send({
-                from: this.account,
-                gas: 500000
-            });
+            if (length < 50) {
+                addUserReview(filmId, review["user-name"], review["review-text"], review["film-score"]).send({
+                    from: this.account,
+                    gas: 150000
+                });
+            } else if (length < 250) {
+                addUserReview(filmId, review["user-name"], review["review-text"], review["film-score"]).send({
+                    from: this.account,
+                    gas: 300000
+                });
+            } else {
+                addUserReview(filmId, review["user-name"], review["review-text"], review["film-score"]).send({
+                    from: this.account,
+                    gas: 500000
+                });
+            }
+        } catch (error) {
+            console.error(error);
         }
-
-    catch (error) {
-        console.error(error);
-    }
-  },
+    },
 
     renderHeader: async function() {
         $.ajax({
@@ -215,6 +227,30 @@ const App = {
             }
         });
     },
+
+    renderSingleReview: async function(id) {
+        console.log(id);
+        $.ajax({
+            url: mongoSingleReviewrUrl,
+            type: 'get',
+            contentType: "application/json; charset=utf-8",
+            data: {
+                blockchainId: id
+            }
+        }).done(function(data) {
+            console.log(data);
+            while (data.length > 0) {
+                let chunks = data.splice(0, 4);
+                chunks.forEach(function(review) {
+                    let node = $("<div id='review'>");
+                    node.append("<div id='poster'><img style='width:150px' src=posters/" + review.posterSource + "></div>");
+                    node.append("<div id='rightside'><span id='title'>" + review.name + "<img src='images/" + review.score + ".png'/></span><span id='reviewtext'>" + review.reviewText + "</span></div>");
+                    $("#reviews").append(node);
+                });
+            }
+        });
+    },
+
 
     // legacy
     //  renderReview: async function(index) {
