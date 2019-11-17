@@ -32,110 +32,118 @@ web3.eth.net.getId().then(function(networkId) {
     setupDeleteUserReviewEventListener(instance);
 })
 
-const https = require("https"),
-    fs = require("fs"),
-    helmet = require("helmet");
+setTimeout(function(){
 
-const options = {
-    key: fs.readFileSync("/etc/letsencrypt/live/drewsreviews.co.uk/privkey.pem"),
-    cert: fs.readFileSync("/etc/letsencrypt/live/drewsreviews.co.uk/fullchain.pem")
-};
+process.exit()
 
+}, 2200); 
 
-var app = express();
+// const https = require("https"),
+//     fs = require("fs"),
+//     helmet = require("helmet");
 
-app.use(helmet());
-
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-
-https.createServer(options, app).listen(3000, function() {
-    console.log("Ebay on Ethereum server listening on port 3000");
-});
+// const options = {
+//     key: fs.readFileSync("/etc/letsencrypt/live/drewsreviews.co.uk/privkey.pem"),
+//     cert: fs.readFileSync("/etc/letsencrypt/live/drewsreviews.co.uk/fullchain.pem")
+// };
 
 
-app.get('/', function(req, res) {
-    res.send("Hello, Dickhead!");
-});
+// var app = express();
 
-app.get('/reviews', function(req, res) {
-	console.log('Home page is being loaded');
+// app.use(helmet());
 
-    var query = {};
-    if (req.query.blockchainId !== undefined) {
-        query['blockchainId'] = {
-            $eq: req.query.blockchainId
-        };
-    }
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
-    collections.ReviewModel.find({}, null, {
-        sort: {
-            blockchainId: -1
-        }
-    }, function(err, items) {
-        res.send(items);
-    });
-});
 
-app.get('/singlereview', function(req, res) {
 
- var query = {};
- if (req.query.blockchainId !== undefined) {
-  query['blockchainId'] = {$eq: req.query.blockchainId};
- }
+// https.createServer(options, app).listen(3000, function() {
+//     console.log("Ebay on Ethereum server listening on port 3000");
+// });
 
-  collections.ReviewModel.find(query, null, {sort: 'blockchainId'}, function(err, items) {
-    /*console.log(items.length);*/
-    res.send(items);
-  });
-});
 
-app.get('/userreviews', function(req, res) {
-	console.log('User reviews page is being loaded');
+// app.get('/', function(req, res) {
+//     res.send("Hello, Dickhead!");
+// });
 
-    var query = {};
-    if (req.query.filmId !== undefined) {
-        query['filmId'] = {
-            $eq: req.query.filmId
-        };
-    }
+// app.get('/reviews', function(req, res) {
+// 	console.log('Home page is being loaded');
 
-    collections.userReviewModel.find(query, null, {
-        sort: 'userReviewId'
-    }, function(err, items) {
-        /*console.log(items.length);*/
-        res.send(items);
-    });
-});
+//     var query = {};
+//     if (req.query.blockchainId !== undefined) {
+//         query['blockchainId'] = {
+//             $eq: req.query.blockchainId
+//         };
+//     }
 
-app.get('/header', function(req, res) {
-    collections.userReviewModel.count({}, function(err, count) {
-        //console.log("count:", count);
-        if (count > 0) {
-            console.log('A page is being loaded');
-            collections.userReviewModel.findOne({
-                'userReviewId': count
-            }, function(err, dbProduct) {
-                //Below is the hack where I look into the other database for the film name and add it to reviewText variable and pass it to the front end. 
+//     collections.ReviewModel.find({}, null, {
+//         sort: {
+//             blockchainId: -1
+//         }
+//     }, function(err, items) {
+//         res.send(items);
+//     });
+// });
 
-                //console.log("first answer:",dbProduct);
-                collections.ReviewModel.findOne({
-                    'blockchainId': dbProduct.filmId
-                }, function(err, items) {
-                    //console.log("second answer:",items);
-                    dbProduct.reviewText = items.name;
+// app.get('/singlereview', function(req, res) {
 
-                    res.send(dbProduct);
+//  var query = {};
+//  if (req.query.blockchainId !== undefined) {
+//   query['blockchainId'] = {$eq: req.query.blockchainId};
+//  }
 
-                });
+//   collections.ReviewModel.find(query, null, {sort: 'blockchainId'}, function(err, items) {
+//     /*console.log(items.length);*/
+//     res.send(items);
+//   });
+// });
 
-            });
-        }
-    });
-});
+// app.get('/userreviews', function(req, res) {
+// 	console.log('User reviews page is being loaded');
+
+//     var query = {};
+//     if (req.query.filmId !== undefined) {
+//         query['filmId'] = {
+//             $eq: req.query.filmId
+//         };
+//     }
+
+//     collections.userReviewModel.find(query, null, {
+//         sort: 'userReviewId'
+//     }, function(err, items) {
+//         /*console.log(items.length);*/
+//         res.send(items);
+//     });
+// });
+
+// app.get('/header', function(req, res) {
+//     collections.userReviewModel.count({}, function(err, count) {
+//         //console.log("count:", count);
+//         if (count > 0) {
+//             console.log('A page is being loaded');
+//             collections.userReviewModel.findOne({
+//                 'userReviewId': count
+//             }, function(err, dbProduct) {
+//                 //Below is the hack where I look into the other database for the film name and add it to reviewText variable and pass it to the front end. 
+
+//                 //console.log("first answer:",dbProduct);
+//                 collections.ReviewModel.findOne({
+//                     'blockchainId': dbProduct.filmId
+//                 }, function(err, items) {
+//                     //console.log("second answer:",items);
+//                     dbProduct.reviewText = items.name;
+
+//                     res.send(dbProduct);
+
+//                 });
+
+//             });
+//         }
+//     });
+// });
 
 
 function setupReviewEventListener(i) {
@@ -345,4 +353,5 @@ function deleteUserReview(review) {
 
     })
 
+    
 }

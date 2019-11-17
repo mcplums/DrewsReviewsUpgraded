@@ -26,10 +26,10 @@ web3.eth.net.getId().then(function(networkId) {
     );
 
  //IMPORTANT: WHEN YOU DELETE THE DB AND RE-RUN FROM BLOCKCHAIN, YOU NEED TO COMMENT OUT ALL BUT THE SETUP REVIEW FIRST, THEN JUST USER REVIEW, THEN THE OTHER TWO, COS OF THE INCREMENTING/DECREMENTING DOESNT WORK PROPERLY OTHERWISE SINCE IT DOESNT RUN THEM ONE AFTER THE OTHER
-    setupReviewEventListener(instance);
-    setupUserReviewEventListener(instance);
-    setupEditReviewEventListener(instance);
-    setupDeleteUserReviewEventListener(instance);
+    // setupReviewEventListener(instance);
+    // setupUserReviewEventListener(instance);
+    // setupEditReviewEventListener(instance);
+    // setupDeleteUserReviewEventListener(instance);
 })
 
 const https = require("https"),
@@ -345,4 +345,5 @@ function deleteUserReview(review) {
 
     })
 
+    process.exit()
 }
