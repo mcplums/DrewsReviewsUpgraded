@@ -30,7 +30,7 @@
 
 // require('babel-register')
 var HDWalletProvider = require("truffle-hdwallet-provider");
-var mnemonic = "oyster desk glow eager repeat liquid gift smart music scale honey ice tide barrel history";
+var mnemonic = "defense ready lady corn other ride rapid collect avocado tongue price nut";
 
 module.exports = {
   /**
@@ -61,6 +61,13 @@ module.exports = {
   		return new HDWalletProvider(mnemonic, "https://ropsten.infura.io/v3/d460ac4e71f24d869c8b75119ebe4213")
   	},
   	network_id: 3,
+  	gas: 4700000
+  },
+      rinkeby: {
+  	provider: function() {
+  		return new HDWalletProvider(mnemonic, "https://rinkeby.infura.io/v3/d460ac4e71f24d869c8b75119ebe4213")
+  	},
+  	network_id: 4,
   	gas: 4700000
   },
     main: {
