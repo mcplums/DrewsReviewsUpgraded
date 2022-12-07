@@ -15,7 +15,7 @@
     "css-loader": "^0.26.1",
     "style-loader": "^0.13.1",
     "mongoose": "5.4.20",
-    "express": "4.15.4"
+    "express": "4.17.3"
   },
   "dependencies": {
     "web3": "^1.0.0-beta.37"
